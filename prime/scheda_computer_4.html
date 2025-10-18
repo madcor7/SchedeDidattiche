@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scheda 4 - Riconosci i Componenti</title>
+    <title>Scheda 4 - Riconosci i Componenti (Interattiva)</title>
     <style>
-        @page {
-            size: A4;
-            margin: 1.5cm;
-        }
         body {
             font-family: 'Comic Sans MS', 'Arial', sans-serif;
             line-height: 1.8;
-            max-width: 21cm;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .container {
             background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         h1 {
             color: #FF5722;
             text-align: center;
-            font-size: 28px;
-            border-bottom: 4px solid #FF5722;
-            padding-bottom: 10px;
+            font-size: 32px;
             margin-bottom: 20px;
         }
         .numero-scheda {
@@ -34,11 +34,18 @@
             font-size: 18px;
             margin-bottom: 15px;
         }
+        .sezione {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            border-left: 5px solid #FF5722;
+        }
         .attivita {
             background: white;
             padding: 20px;
             margin: 20px 0;
-            border: 3px dashed #FF9800;
+            border: 3px solid #FF9800;
             border-radius: 10px;
         }
         .attivita h3 {
@@ -58,18 +65,36 @@
             padding: 20px;
             text-align: center;
             background: white;
+            transition: all 0.3s;
         }
-        .spazio-nome {
-            margin-top: 15px;
+        .carta-componente:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .text-input-name {
+            width: 90%;
+            padding: 10px;
             font-size: 18px;
-            font-weight: bold;
+            border: 3px solid #FF5722;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+            text-align: center;
         }
-        .linea-risposta {
-            border-bottom: 2px solid #333;
-            min-height: 30px;
-            margin-top: 5px;
+        .text-input-name:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: #E8F5E9;
         }
-        .box-opzioni {
+        .text-input-name.correct {
+            background: #C8E6C9;
+            border-color: #4CAF50;
+        }
+        .text-input-name.incorrect {
+            background: #FFCDD2;
+            border-color: #F44336;
+        }
+        .word-bank {
             background: #FFF9C4;
             padding: 15px;
             border-radius: 8px;
@@ -77,7 +102,7 @@
             border: 2px solid #FBC02D;
             text-align: center;
         }
-        .opzione {
+        .word-option {
             display: inline-block;
             background: white;
             padding: 10px 20px;
@@ -85,157 +110,507 @@
             border: 2px solid #FF5722;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .sezione {
-            margin: 25px 0;
-            padding: 20px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            border-left: 5px solid #FF5722;
+        .word-option:hover {
+            background: #FFCCBC;
+            transform: scale(1.05);
         }
-        .checkbox-grande {
-            width: 25px;
-            height: 25px;
+        .word-option.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .radio-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .radio-option {
             border: 3px solid #333;
-            display: inline-block;
-            margin-right: 10px;
-            vertical-align: middle;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        .radio-option:hover {
+            background: #FFF9C4;
+            transform: scale(1.05);
+        }
+        .radio-option.selected {
+            background: #FFE0B2;
+            border-color: #FF9800;
+        }
+        .radio-option.correct {
+            background: #C8E6C9;
+            border-color: #4CAF50;
+        }
+        .radio-option.incorrect {
+            background: #FFCDD2;
+            border-color: #F44336;
+        }
+        .drawing-area {
+            border: 3px solid #FF5722;
+            border-radius: 10px;
+            background: white;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .color-btn:hover {
+            transform: scale(1.15);
+        }
+        .color-btn.active {
+            border: 4px solid #000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .canvas-container {
+            position: relative;
+            margin: 20px auto;
+        }
+        canvas {
+            border: 2px solid #333;
+            cursor: crosshair;
+            display: block;
+            margin: 0 auto;
+            background: white;
+        }
+        .btn-clear {
+            background: #F44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        .btn-clear:hover {
+            background: #D32F2F;
+        }
+        .feedback {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            display: none;
+        }
+        .feedback.success {
+            background: #C8E6C9;
+            color: #2E7D32;
+            display: block;
+        }
+        .feedback.error {
+            background: #FFCDD2;
+            color: #C62828;
+            display: block;
+        }
+        .btn-check {
+            background: #FF5722;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        .btn-check:hover {
+            background: #E64A19;
+            transform: scale(1.05);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF5722, #FF9800);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="numero-scheda">📋 Scheda 4</div>
-    <h1>🔍 RICONOSCI I COMPONENTI</h1>
-    
-    <div class="sezione">
-        <h2 style="color: #FF5722;">Esercizi di riconoscimento</h2>
-        <p style="font-size: 20px; text-align: center; font-weight: bold;">
-            Ora impariamo a riconoscere le parti del computer!
-        </p>
-    </div>
-
-    <div class="attivita">
-        <h3>✏️ ATTIVITÀ 1: Scrivi il nome giusto</h3>
-        <div class="box-opzioni">
-            <strong style="font-size: 18px;">Usa queste parole:</strong><br>
-            <span class="opzione">MONITOR</span>
-            <span class="opzione">TASTIERA</span>
-            <span class="opzione">MOUSE</span>
-            <span class="opzione">CASE</span>
+    <div class="container">
+        <div class="numero-scheda">📋 Scheda 4</div>
+        <h1>🔍 RICONOSCI I COMPONENTI</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress">0%</div>
         </div>
         
-        <div class="griglia-riconoscimento">
-            <div class="carta-componente">
-                <svg width="100%" height="120" viewBox="0 0 120 100">
-                    <rect x="10" y="10" width="100" height="65" fill="white" stroke="black" stroke-width="3"/>
-                    <rect x="18" y="18" width="84" height="50" fill="#E3F2FD" stroke="black" stroke-width="2"/>
-                    <rect x="45" y="75" width="30" height="10" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="35" y="85" width="50" height="5" fill="white" stroke="black" stroke-width="2"/>
-                </svg>
-                <div class="spazio-nome">
-                    Questo è il:<br>
-                    <div class="linea-risposta"></div>
-                </div>
-            </div>
+        <div class="sezione">
+            <h2 style="color: #FF5722;">Esercizi di riconoscimento</h2>
+            <p style="font-size: 20px; text-align: center; font-weight: bold;">
+                Ora impariamo a riconoscere le parti del computer!
+            </p>
+        </div>
 
-            <div class="carta-componente">
-                <svg width="100%" height="120" viewBox="0 0 140 80">
-                    <rect x="10" y="15" width="120" height="45" fill="white" stroke="black" stroke-width="3" rx="3"/>
-                    <rect x="15" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="28" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="41" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="54" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="67" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="15" y="32" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="28" y="32" width="50" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="81" y="32" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="15" y="44" width="15" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="33" y="44" width="70" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                </svg>
-                <div class="spazio-nome">
-                    Questa è la:<br>
-                    <div class="linea-risposta"></div>
-                </div>
+        <div class="attivita">
+            <h3>✏️ ATTIVITÀ 1: Scrivi il nome giusto</h3>
+            <div class="word-bank">
+                <strong style="font-size: 18px;">Clicca su una parola e poi sul componente:</strong><br>
+                <span class="word-option" onclick="selectWord(this, 'MONITOR')">MONITOR</span>
+                <span class="word-option" onclick="selectWord(this, 'TASTIERA')">TASTIERA</span>
+                <span class="word-option" onclick="selectWord(this, 'MOUSE')">MOUSE</span>
+                <span class="word-option" onclick="selectWord(this, 'CASE')">CASE</span>
             </div>
+            
+            <div class="griglia-riconoscimento">
+                <div class="carta-componente" onclick="assignName(this, 'MONITOR')">
+                    <svg width="100%" height="120" viewBox="0 0 120 100">
+                        <rect x="10" y="10" width="100" height="65" fill="white" stroke="black" stroke-width="3"/>
+                        <rect x="18" y="18" width="84" height="50" fill="#E3F2FD" stroke="black" stroke-width="2"/>
+                        <rect x="45" y="75" width="30" height="10" fill="white" stroke="black" stroke-width="2"/>
+                        <rect x="35" y="85" width="50" height="5" fill="white" stroke="black" stroke-width="2"/>
+                    </svg>
+                    <input type="text" class="text-input-name" placeholder="Clicca una parola sopra" readonly>
+                </div>
 
-            <div class="carta-componente">
-                <svg width="100%" height="120" viewBox="0 0 100 120">
-                    <ellipse cx="50" cy="55" rx="28" ry="38" fill="white" stroke="black" stroke-width="3"/>
-                    <line x1="50" y1="22" x2="50" y2="62" stroke="black" stroke-width="2"/>
-                    <circle cx="50" cy="32" r="6" fill="white" stroke="black" stroke-width="2"/>
-                    <path d="M 50 90 Q 55 100 60 95" fill="none" stroke="black" stroke-width="2"/>
-                </svg>
-                <div class="spazio-nome">
-                    Questo è il:<br>
-                    <div class="linea-risposta"></div>
+                <div class="carta-componente" onclick="assignName(this, 'TASTIERA')">
+                    <svg width="100%" height="120" viewBox="0 0 140 80">
+                        <rect x="10" y="15" width="120" height="45" fill="white" stroke="black" stroke-width="3" rx="3"/>
+                        <rect x="15" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                        <rect x="28" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                        <rect x="41" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                        <rect x="15" y="32" width="50" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    </svg>
+                    <input type="text" class="text-input-name" placeholder="Clicca una parola sopra" readonly>
                 </div>
-            </div>
 
-            <div class="carta-componente">
-                <svg width="100%" height="120" viewBox="0 0 90 120">
-                    <rect x="15" y="15" width="60" height="90" fill="white" stroke="black" stroke-width="3"/>
-                    <circle cx="45" cy="35" r="10" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="25" y="55" width="40" height="5" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="25" y="65" width="40" height="5" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="25" y="80" width="40" height="18" fill="white" stroke="black" stroke-width="2"/>
-                    <circle cx="35" cy="89" r="3" fill="black"/>
-                </svg>
-                <div class="spazio-nome">
-                    Questo è il:<br>
-                    <div class="linea-risposta"></div>
+                <div class="carta-componente" onclick="assignName(this, 'MOUSE')">
+                    <svg width="100%" height="120" viewBox="0 0 100 120">
+                        <ellipse cx="50" cy="55" rx="28" ry="38" fill="white" stroke="black" stroke-width="3"/>
+                        <line x1="50" y1="22" x2="50" y2="62" stroke="black" stroke-width="2"/>
+                        <circle cx="50" cy="32" r="6" fill="white" stroke="black" stroke-width="2"/>
+                    </svg>
+                    <input type="text" class="text-input-name" placeholder="Clicca una parola sopra" readonly>
+                </div>
+
+                <div class="carta-componente" onclick="assignName(this, 'CASE')">
+                    <svg width="100%" height="120" viewBox="0 0 90 120">
+                        <rect x="15" y="15" width="60" height="90" fill="white" stroke="black" stroke-width="3"/>
+                        <circle cx="45" cy="35" r="10" fill="white" stroke="black" stroke-width="2"/>
+                        <rect x="25" y="55" width="40" height="5" fill="white" stroke="black" stroke-width="2"/>
+                        <rect x="25" y="80" width="40" height="18" fill="white" stroke="black" stroke-width="2"/>
+                    </svg>
+                    <input type="text" class="text-input-name" placeholder="Clicca una parola sopra" readonly>
                 </div>
             </div>
+            <button class="btn-check" onclick="checkActivity1()">Verifica ✓</button>
+            <div class="feedback" id="feedback1"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>✅ ATTIVITÀ 2: Segna con un click</h3>
+            <p style="font-size: 18px;">Quale di questi è un MOUSE? Clicca sulla risposta corretta:</p>
+            <div class="radio-group">
+                <div class="radio-option" onclick="selectRadio(this, false)">
+                    <svg width="120" height="80" viewBox="0 0 140 80">
+                        <rect x="10" y="15" width="120" height="45" fill="white" stroke="black" stroke-width="3" rx="3"/>
+                        <rect x="15" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="radio-option" onclick="selectRadio(this, true)">
+                    <svg width="100" height="100" viewBox="0 0 100 120">
+                        <ellipse cx="50" cy="55" rx="28" ry="38" fill="white" stroke="black" stroke-width="3"/>
+                        <line x1="50" y1="22" x2="50" y2="62" stroke="black" stroke-width="2"/>
+                        <circle cx="50" cy="32" r="6" fill="white" stroke="black" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="feedback" id="feedback2"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>🎨 ATTIVITÀ 3: Colora e scrivi</h3>
+            <p style="font-size: 18px;">Colora il MONITOR e scrivi "MONITOR" sotto</p>
+            <div class="color-palette">
+                <div class="color-btn active" style="background: #FF6B6B;" data-color="#FF6B6B"></div>
+                <div class="color-btn" style="background: #4ECDC4;" data-color="#4ECDC4"></div>
+                <div class="color-btn" style="background: #FFE66D;" data-color="#FFE66D"></div>
+                <div class="color-btn" style="background: #95E1D3;" data-color="#95E1D3"></div>
+            </div>
+            <div class="drawing-area">
+                <canvas id="drawCanvas" width="300" height="200"></canvas>
+                <br>
+                <button class="btn-clear" onclick="clearCanvas()">🗑️ Cancella</button>
+            </div>
+            <input type="text" class="text-input-name" id="monitorInput" placeholder="Scrivi MONITOR qui" style="width: 300px; display: block; margin: 20px auto;">
+            <button class="btn-check" onclick="checkActivity3()">Verifica ✓</button>
+            <div class="feedback" id="feedback3"></div>
+        </div>
+
+        <div class="sezione" style="background: #FFCCBC; border-left-color: #FF5722;">
+            <h3 style="color: #D84315;">💡 Ricorda!</h3>
+            <p style="font-size: 18px; font-weight: bold; text-align: center;">
+                Ogni componente ha una FORMA diversa<br>
+                e un NOME diverso!<br><br>
+                Guardali bene per riconoscerli! 👀
+            </p>
         </div>
     </div>
 
-    <div class="attivita">
-        <h3>✅ ATTIVITÀ 2: Segna con una X</h3>
-        <p style="font-size: 18px;">Quale di questi è un MOUSE? Segna con una X</p>
-        <div class="griglia-riconoscimento">
-            <div class="carta-componente">
-                <div class="checkbox-grande"></div>
-                <svg width="100%" height="100" viewBox="0 0 140 80">
-                    <rect x="10" y="15" width="120" height="45" fill="white" stroke="black" stroke-width="3" rx="3"/>
-                    <rect x="15" y="20" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="28" y="20" width="50" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                </svg>
-            </div>
-            <div class="carta-componente">
-                <div class="checkbox-grande"></div>
-                <svg width="100%" height="100" viewBox="0 0 100 120">
-                    <ellipse cx="50" cy="55" rx="28" ry="38" fill="white" stroke="black" stroke-width="3"/>
-                    <line x1="50" y1="22" x2="50" y2="62" stroke="black" stroke-width="2"/>
-                    <circle cx="50" cy="32" r="6" fill="white" stroke="black" stroke-width="2"/>
-                </svg>
-            </div>
-        </div>
-    </div>
+    <script>
+        let completedActivities = 0;
+        let selectedWordText = null;
+        let selectedRadioOption = null;
+        let currentColor = '#FF6B6B';
+        let isDrawing = false;
+        let hasDrawn = false;
+        
+        // Canvas setup
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        
+        // Drawing del monitor
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(50, 20, 200, 120);
+        ctx.strokeRect(60, 30, 180, 95);
+        ctx.fillRect(130, 140, 40, 15);
+        ctx.fillRect(110, 155, 80, 10);
 
-    <div class="attivita">
-        <h3>🎨 ATTIVITÀ 3: Colora e scrivi</h3>
-        <p style="font-size: 18px;">Colora il MONITOR e scrivi "MONITOR" sotto</p>
-        <div style="text-align: center; margin: 20px 0;">
-            <svg width="200" height="160" viewBox="0 0 120 100">
-                <rect x="10" y="10" width="100" height="65" fill="white" stroke="black" stroke-width="3"/>
-                <rect x="18" y="18" width="84" height="50" fill="white" stroke="black" stroke-width="2"/>
-                <rect x="45" y="75" width="30" height="10" fill="white" stroke="black" stroke-width="2"/>
-                <rect x="35" y="85" width="50" height="5" fill="white" stroke="black" stroke-width="2"/>
-            </svg>
-            <div style="font-size: 24px; margin-top: 20px;">
-                <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>
-            </div>
-        </div>
-    </div>
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        });
+        
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
 
-    <div class="sezione" style="background: #FFCCBC; border-left-color: #FF5722;">
-        <h3 style="color: #D84315;">💡 Ricorda!</h3>
-        <p style="font-size: 18px; font-weight: bold; text-align: center;">
-            Ogni componente ha una FORMA diversa<br>
-            e un NOME diverso!<br><br>
-            Guardali bene per riconoscerli! 👀
-        </p>
-    </div>
+        function startDrawing(e) {
+            isDrawing = true;
+            hasDrawn = true;
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
 
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = 5;
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(50, 20, 200, 120);
+            ctx.strokeRect(60, 30, 180, 95);
+            ctx.fillRect(130, 140, 40, 15);
+            ctx.fillRect(110, 155, 80, 10);
+            hasDrawn = false;
+        }
+
+        // Gestione palette colori
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentColor = this.dataset.color;
+            });
+        });
+
+        // Attività 1: Seleziona parola e assegna
+        function selectWord(element, word) {
+            document.querySelectorAll('.word-option').forEach(opt => {
+                opt.style.background = 'white';
+            });
+            element.style.background = '#FFE0B2';
+            selectedWordText = word;
+        }
+
+        function assignName(card, correctName) {
+            if (!selectedWordText) {
+                alert('Prima seleziona una parola!');
+                return;
+            }
+            
+            const input = card.querySelector('.text-input-name');
+            input.value = selectedWordText;
+            input.dataset.answer = correctName;
+            
+            document.querySelectorAll('.word-option').forEach(opt => {
+                if (opt.textContent === selectedWordText) {
+                    opt.classList.add('used');
+                }
+            });
+            
+            selectedWordText = null;
+            document.querySelectorAll('.word-option').forEach(opt => {
+                opt.style.background = 'white';
+            });
+        }
+
+        function checkActivity1() {
+            let allCorrect = true;
+            let allFilled = true;
+            
+            document.querySelectorAll('.text-input-name').forEach(input => {
+                if (!input.value) {
+                    allFilled = false;
+                    return;
+                }
+                
+                if (input.value === input.dataset.answer) {
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                } else {
+                    input.classList.add('incorrect');
+                    input.classList.remove('correct');
+                    allCorrect = false;
+                }
+            });
+            
+            const feedback = document.getElementById('feedback1');
+            if (!allFilled) {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Completa tutti i componenti!';
+            } else if (allCorrect) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎉 Perfetto! Hai riconosciuto tutti i componenti!';
+                if (completedActivities === 0) {
+                    completedActivities = 1;
+                    updateProgress();
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Alcuni nomi non sono corretti. Riprova!';
+            }
+        }
+
+        function selectRadio(element, isCorrect) {
+            if (selectedRadioOption) return;
+            
+            selectedRadioOption = element;
+            element.classList.add('selected');
+            
+            setTimeout(() => {
+                const feedback = document.getElementById('feedback2');
+                if (isCorrect) {
+                    element.classList.remove('selected');
+                    element.classList.add('correct');
+                    feedback.className = 'feedback success';
+                    feedback.textContent = '✅ Esatto! Questo è il MOUSE!';
+                    if (completedActivities === 1) {
+                        completedActivities = 2;
+                        updateProgress();
+                    }
+                } else {
+                    element.classList.remove('selected');
+                    element.classList.add('incorrect');
+                    feedback.className = 'feedback error';
+                    feedback.textContent = '❌ No, questa è la tastiera. Prova l\'altro!';
+                    setTimeout(() => {
+                        element.classList.remove('incorrect');
+                        selectedRadioOption = null;
+                    }, 2000);
+                }
+            }, 500);
+        }
+
+        function checkActivity3() {
+            const input = document.getElementById('monitorInput');
+            const text = input.value.toUpperCase().trim();
+            const feedback = document.getElementById('feedback3');
+            
+            if (!hasDrawn) {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Prima colora il monitor!';
+                return;
+            }
+            
+            if (text === 'MONITOR') {
+                input.classList.add('correct');
+                input.classList.remove('incorrect');
+                feedback.className = 'feedback success';
+                feedback.textContent = '🌟 Eccellente! Hai colorato e scritto correttamente!';
+                if (completedActivities === 2) {
+                    completedActivities = 3;
+                    updateProgress();
+                }
+            } else {
+                input.classList.add('incorrect');
+                input.classList.remove('correct');
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ La parola non è corretta. Riprova!';
+            }
+        }
+
+        function updateProgress() {
+            const percentage = (completedActivities / 3) * 100;
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = Math.round(percentage) + '%';
+        }
+    </script>
 </body>
 </html>
