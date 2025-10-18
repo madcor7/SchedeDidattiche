@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scheda 3 - I Componenti del Computer</title>
+    <title>Scheda 3 - I Componenti (Interattiva)</title>
     <style>
-        @page {
-            size: A4;
-            margin: 1.5cm;
-        }
         body {
             font-family: 'Comic Sans MS', 'Arial', sans-serif;
             line-height: 1.8;
-            max-width: 21cm;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
             background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         h1 {
             color: #9C27B0;
             text-align: center;
-            font-size: 28px;
-            border-bottom: 4px solid #9C27B0;
-            padding-bottom: 10px;
+            font-size: 32px;
             margin-bottom: 20px;
         }
         .numero-scheda {
@@ -47,6 +47,15 @@
             border-radius: 15px;
             padding: 20px;
             margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .componente-box:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        .componente-box.revealed {
+            background: #E1BEE7;
         }
         .componente-header {
             display: flex;
@@ -66,12 +75,21 @@
             font-size: 18px;
             margin-top: 10px;
             padding-left: 55px;
+            display: none;
+        }
+        .componente-box.revealed .descrizione-componente {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .attivita {
             background: white;
             padding: 20px;
             margin: 20px 0;
-            border: 3px dashed #FF9800;
+            border: 3px solid #FF9800;
             border-radius: 10px;
         }
         .attivita h3 {
@@ -91,149 +109,433 @@
             border-radius: 10px;
             text-align: center;
             background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .componente-da-colorare:hover {
+            transform: scale(1.05);
+        }
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .color-btn:hover {
+            transform: scale(1.15);
+        }
+        .color-btn.active {
+            border: 4px solid #000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .letter-input {
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            text-align: center;
+            border: 3px solid #9C27B0;
+            border-radius: 8px;
+            margin: 0 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .letter-input:focus {
+            outline: none;
+            border-color: #FF9800;
+            background: #FFF9C4;
+        }
+        .word-puzzle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            font-size: 24px;
+        }
+        .matching-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .matching-row:hover {
+            background: #E1BEE7;
+        }
+        .matching-row.correct {
+            background: #C8E6C9;
+            border-left: 5px solid #4CAF50;
+        }
+        .match-select {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 2px solid #9C27B0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .feedback {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            display: none;
+        }
+        .feedback.success {
+            background: #C8E6C9;
+            color: #2E7D32;
+            display: block;
+        }
+        .feedback.error {
+            background: #FFCDD2;
+            color: #C62828;
+            display: block;
+        }
+        .btn-check {
+            background: #9C27B0;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        .btn-check:hover {
+            background: #7B1FA2;
+            transform: scale(1.05);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9C27B0, #CE93D8);
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="numero-scheda">📋 Scheda 3</div>
-    <h1>🧩 I COMPONENTI DEL COMPUTER</h1>
-    
-    <div class="sezione">
-        <h2 style="color: #9C27B0;">Le parti del computer</h2>
-        <p style="font-size: 20px; text-align: center; font-weight: bold;">
-            Il computer è fatto di TANTE PARTI!<br>
-            Ogni parte ha un nome e serve a qualcosa.
-        </p>
-    </div>
+    <div class="container">
+        <div class="numero-scheda">📋 Scheda 3</div>
+        <h1>🧩 I COMPONENTI DEL COMPUTER</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress">0%</div>
+        </div>
+        
+        <div class="sezione">
+            <h2 style="color: #9C27B0;">Le parti del computer</h2>
+            <p style="font-size: 20px; text-align: center; font-weight: bold;">
+                Il computer è fatto di TANTE PARTI!<br>
+                Clicca su ogni componente per scoprire a cosa serve! 👇
+            </p>
+        </div>
 
-    <div class="componente-box">
-        <div class="componente-header">
-            <div class="icona-componente">🖥️</div>
-            <div class="nome-componente">MONITOR (o SCHERMO)</div>
-        </div>
-        <div class="descrizione-componente">
-            È lo schermo dove vediamo le immagini, i video e tutto quello che facciamo.
-        </div>
-    </div>
-
-    <div class="componente-box">
-        <div class="componente-header">
-            <div class="icona-componente">⌨️</div>
-            <div class="nome-componente">TASTIERA</div>
-        </div>
-        <div class="descrizione-componente">
-            Ha tanti tasti con lettere e numeri. Serve per scrivere.
-        </div>
-    </div>
-
-    <div class="componente-box">
-        <div class="componente-header">
-            <div class="icona-componente">🖱️</div>
-            <div class="nome-componente">MOUSE</div>
-        </div>
-        <div class="descrizione-componente">
-            Lo muoviamo con la mano per cliccare e scegliere le cose sullo schermo.
-        </div>
-    </div>
-
-    <div class="componente-box">
-        <div class="componente-header">
-            <div class="icona-componente">💾</div>
-            <div class="nome-componente">CASE (o UNITÀ CENTRALE)</div>
-        </div>
-        <div class="descrizione-componente">
-            È la "scatola" del computer, dove c'è il cervello che fa funzionare tutto.
-        </div>
-    </div>
-
-    <div class="attivita">
-        <h3>🎨 ATTIVITÀ 1: Colora i componenti</h3>
-        <div class="griglia-componenti">
-            <div class="componente-da-colorare">
-                <div style="font-weight: bold; margin-bottom: 10px;">MONITOR</div>
-                <svg width="120" height="100" viewBox="0 0 120 100">
-                    <rect x="10" y="10" width="100" height="65" fill="white" stroke="black" stroke-width="3"/>
-                    <rect x="18" y="18" width="84" height="50" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="45" y="75" width="30" height="10" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="35" y="85" width="50" height="5" fill="white" stroke="black" stroke-width="2"/>
-                </svg>
+        <div class="componente-box" onclick="revealComponent(this)">
+            <div class="componente-header">
+                <div class="icona-componente">🖥️</div>
+                <div class="nome-componente">MONITOR (o SCHERMO)</div>
             </div>
-            <div class="componente-da-colorare">
-                <div style="font-weight: bold; margin-bottom: 10px;">TASTIERA</div>
-                <svg width="120" height="100" viewBox="0 0 140 60">
-                    <rect x="10" y="10" width="120" height="40" fill="white" stroke="black" stroke-width="3" rx="3"/>
-                    <rect x="15" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="28" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="41" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="54" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="67" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="15" y="27" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="28" y="27" width="50" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                    <rect x="81" y="27" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
-                </svg>
-            </div>
-            <div class="componente-da-colorare">
-                <div style="font-weight: bold; margin-bottom: 10px;">MOUSE</div>
-                <svg width="120" height="100" viewBox="0 0 80 100">
-                    <ellipse cx="40" cy="50" rx="25" ry="35" fill="white" stroke="black" stroke-width="3"/>
-                    <line x1="40" y1="20" x2="40" y2="55" stroke="black" stroke-width="2"/>
-                    <circle cx="40" cy="30" r="5" fill="white" stroke="black" stroke-width="2"/>
-                </svg>
-            </div>
-            <div class="componente-da-colorare">
-                <div style="font-weight: bold; margin-bottom: 10px;">CASE</div>
-                <svg width="120" height="100" viewBox="0 0 80 120">
-                    <rect x="15" y="10" width="50" height="80" fill="white" stroke="black" stroke-width="3"/>
-                    <circle cx="40" cy="30" r="8" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="25" y="50" width="30" height="4" fill="white" stroke="black" stroke-width="2"/>
-                    <rect x="25" y="60" width="30" height="15" fill="white" stroke="black" stroke-width="2"/>
-                </svg>
+            <div class="descrizione-componente">
+                È lo schermo dove vediamo le immagini, i video e tutto quello che facciamo.
             </div>
         </div>
-    </div>
 
-    <div class="attivita">
-        <h3>✏️ ATTIVITÀ 2: Completa i nomi</h3>
-        <div style="font-size: 20px; line-height: 3;">
-            <p>🖥️ M __ __ I T __ __</p>
-            <p>⌨️ T __ S T __ __ R __</p>
-            <p>🖱️ M __ __ S E</p>
-            <p>💾 C __ S E</p>
+        <div class="componente-box" onclick="revealComponent(this)">
+            <div class="componente-header">
+                <div class="icona-componente">⌨️</div>
+                <div class="nome-componente">TASTIERA</div>
+            </div>
+            <div class="descrizione-componente">
+                Ha tanti tasti con lettere e numeri. Serve per scrivere.
+            </div>
         </div>
-    </div>
 
-    <div class="attivita">
-        <h3>🔗 ATTIVITÀ 3: Abbina la descrizione</h3>
-        <p style="font-size: 18px;">Collega ogni componente con la sua funzione:</p>
-        <div style="margin: 20px 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+        <div class="componente-box" onclick="revealComponent(this)">
+            <div class="componente-header">
+                <div class="icona-componente">🖱️</div>
+                <div class="nome-componente">MOUSE</div>
+            </div>
+            <div class="descrizione-componente">
+                Lo muoviamo con la mano per cliccare e scegliere le cose sullo schermo.
+            </div>
+        </div>
+
+        <div class="componente-box" onclick="revealComponent(this)">
+            <div class="componente-header">
+                <div class="icona-componente">💾</div>
+                <div class="nome-componente">CASE (o UNITÀ CENTRALE)</div>
+            </div>
+            <div class="descrizione-componente">
+                È la "scatola" del computer, dove c'è il cervello che fa funzionare tutto.
+            </div>
+        </div>
+        <div class="feedback" id="feedback1"></div>
+
+        <div class="attivita">
+            <h3>🎨 ATTIVITÀ 1: Colora i componenti</h3>
+            <p style="font-size: 18px;">Scegli un colore e clicca su ogni componente per colorarlo!</p>
+            <div class="color-palette">
+                <div class="color-btn active" style="background: #FF6B6B;" data-color="#FF6B6B"></div>
+                <div class="color-btn" style="background: #4ECDC4;" data-color="#4ECDC4"></div>
+                <div class="color-btn" style="background: #FFE66D;" data-color="#FFE66D"></div>
+                <div class="color-btn" style="background: #95E1D3;" data-color="#95E1D3"></div>
+                <div class="color-btn" style="background: #AA96DA;" data-color="#AA96DA"></div>
+            </div>
+            <div class="griglia-componenti">
+                <div class="componente-da-colorare" style="background: white;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">MONITOR</div>
+                    <div style="font-size: 60px;">🖥️</div>
+                </div>
+                <div class="componente-da-colorare" style="background: white;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">TASTIERA</div>
+                    <div style="font-size: 60px;">⌨️</div>
+                </div>
+                <div class="componente-da-colorare" style="background: white;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">MOUSE</div>
+                    <div style="font-size: 60px;">🖱️</div>
+                </div>
+                <div class="componente-da-colorare" style="background: white;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">CASE</div>
+                    <div style="font-size: 60px;">💾</div>
+                </div>
+            </div>
+            <div class="feedback" id="feedback2"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>✏️ ATTIVITÀ 2: Completa i nomi</h3>
+            <p style="font-size: 18px;">Scrivi le lettere mancanti per completare i nomi!</p>
+            
+            <div class="word-puzzle">
+                🖥️ M<input type="text" class="letter-input" maxlength="1" data-answer="O">
+                <input type="text" class="letter-input" maxlength="1" data-answer="N">I T
+                <input type="text" class="letter-input" maxlength="1" data-answer="O">
+                <input type="text" class="letter-input" maxlength="1" data-answer="R">
+            </div>
+            
+            <div class="word-puzzle">
+                ⌨️ T<input type="text" class="letter-input" maxlength="1" data-answer="A">S T
+                <input type="text" class="letter-input" maxlength="1" data-answer="I">
+                <input type="text" class="letter-input" maxlength="1" data-answer="E">R
+                <input type="text" class="letter-input" maxlength="1" data-answer="A">
+            </div>
+            
+            <div class="word-puzzle">
+                🖱️ M<input type="text" class="letter-input" maxlength="1" data-answer="O">
+                <input type="text" class="letter-input" maxlength="1" data-answer="U">S E
+            </div>
+            
+            <div class="word-puzzle">
+                💾 C<input type="text" class="letter-input" maxlength="1" data-answer="A">S E
+            </div>
+            
+            <button class="btn-check" onclick="checkActivity2()">Verifica ✓</button>
+            <div class="feedback" id="feedback3"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>🔗 ATTIVITÀ 3: Abbina la descrizione</h3>
+            <p style="font-size: 18px;">Scegli la funzione corretta per ogni componente:</p>
+            
+            <div class="matching-row" data-correct="vedere">
                 <span style="font-size: 20px; font-weight: bold;">MONITOR</span>
-                <span style="font-size: 18px;">• Serve per scrivere</span>
+                <select class="match-select" onchange="checkMatch(this)">
+                    <option value="">Scegli...</option>
+                    <option value="scrivere">Serve per scrivere</option>
+                    <option value="vedere">Serve per vedere</option>
+                    <option value="cervello">È il cervello del computer</option>
+                    <option value="cliccare">Serve per cliccare</option>
+                </select>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+            
+            <div class="matching-row" data-correct="scrivere">
                 <span style="font-size: 20px; font-weight: bold;">TASTIERA</span>
-                <span style="font-size: 18px;">• Serve per vedere</span>
+                <select class="match-select" onchange="checkMatch(this)">
+                    <option value="">Scegli...</option>
+                    <option value="scrivere">Serve per scrivere</option>
+                    <option value="vedere">Serve per vedere</option>
+                    <option value="cervello">È il cervello del computer</option>
+                    <option value="cliccare">Serve per cliccare</option>
+                </select>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+            
+            <div class="matching-row" data-correct="cliccare">
                 <span style="font-size: 20px; font-weight: bold;">MOUSE</span>
-                <span style="font-size: 18px;">• È il cervello del computer</span>
+                <select class="match-select" onchange="checkMatch(this)">
+                    <option value="">Scegli...</option>
+                    <option value="scrivere">Serve per scrivere</option>
+                    <option value="vedere">Serve per vedere</option>
+                    <option value="cervello">È il cervello del computer</option>
+                    <option value="cliccare">Serve per cliccare</option>
+                </select>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+            
+            <div class="matching-row" data-correct="cervello">
                 <span style="font-size: 20px; font-weight: bold;">CASE</span>
-                <span style="font-size: 18px;">• Serve per cliccare</span>
+                <select class="match-select" onchange="checkMatch(this)">
+                    <option value="">Scegli...</option>
+                    <option value="scrivere">Serve per scrivere</option>
+                    <option value="vedere">Serve per vedere</option>
+                    <option value="cervello">È il cervello del computer</option>
+                    <option value="cliccare">Serve per cliccare</option>
+                </select>
             </div>
+            <div class="feedback" id="feedback4"></div>
+        </div>
+
+        <div class="sezione" style="background: #E1BEE7; border-left-color: #9C27B0;">
+            <h3 style="color: #6A1B9A;">💡 Ricorda!</h3>
+            <p style="font-size: 18px; font-weight: bold; text-align: center;">
+                🖥️ MONITOR = vedo<br>
+                ⌨️ TASTIERA = scrivo<br>
+                🖱️ MOUSE = clicco<br>
+                💾 CASE = cervello
+            </p>
         </div>
     </div>
 
-    <div class="sezione" style="background: #E1BEE7; border-left-color: #9C27B0;">
-        <h3 style="color: #6A1B9A;">💡 Ricorda!</h3>
-        <p style="font-size: 18px; font-weight: bold; text-align: center;">
-            🖥️ MONITOR = vedo<br>
-            ⌨️ TASTIERA = scrivo<br>
-            🖱️ MOUSE = clicco<br>
-            💾 CASE = cervello
-        </p>
-    </div>
+    <script>
+        let currentColor = '#FF6B6B';
+        let completedActivities = 0;
+        let revealedComponents = 0;
+        let coloredComponents = 0;
+        let correctMatches = 0;
 
+        // Rivela componenti
+        function revealComponent(box) {
+            if (!box.classList.contains('revealed')) {
+                box.classList.add('revealed');
+                revealedComponents++;
+                
+                if (revealedComponents === 4 && completedActivities === 0) {
+                    completedActivities = 1;
+                    updateProgress();
+                    document.getElementById('feedback1').className = 'feedback success';
+                    document.getElementById('feedback1').textContent = '🎉 Perfetto! Hai scoperto tutti i componenti!';
+                }
+            }
+        }
+
+        // Gestione palette colori
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentColor = this.dataset.color;
+            });
+        });
+
+        // Colorazione componenti
+        document.querySelectorAll('.componente-da-colorare').forEach(comp => {
+            comp.addEventListener('click', function() {
+                if (this.style.background === 'white' || this.style.background === '') {
+                    coloredComponents++;
+                }
+                this.style.background = currentColor;
+                
+                if (coloredComponents === 4 && completedActivities === 1) {
+                    completedActivities = 2;
+                    updateProgress();
+                    document.getElementById('feedback2').className = 'feedback success';
+                    document.getElementById('feedback2').textContent = '🎨 Bravissimo! Hai colorato tutti i componenti!';
+                }
+            });
+        });
+
+        // Auto-focus prossimo input
+        document.querySelectorAll('.letter-input').forEach((input, index, inputs) => {
+            input.addEventListener('input', function() {
+                if (this.value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+        });
+
+        // Verifica parole complete
+        function checkActivity2() {
+            let allCorrect = true;
+            document.querySelectorAll('.letter-input').forEach(input => {
+                const userValue = input.value.toUpperCase();
+                const correctValue = input.dataset.answer;
+                
+                if (userValue !== correctValue) {
+                    allCorrect = false;
+                    input.style.background = '#FFCDD2';
+                } else {
+                    input.style.background = '#C8E6C9';
+                }
+            });
+            
+            const feedback = document.getElementById('feedback3');
+            if (allCorrect) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🌟 Eccellente! Tutte le parole sono corrette!';
+                if (completedActivities === 2) {
+                    completedActivities = 3;
+                    updateProgress();
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Alcune lettere non sono corrette. Riprova!';
+            }
+        }
+
+        // Verifica abbinamenti
+        function checkMatch(select) {
+            const row = select.closest('.matching-row');
+            const correct = row.dataset.correct;
+            
+            if (select.value === correct) {
+                row.classList.add('correct');
+                select.disabled = true;
+                correctMatches++;
+                
+                if (correctMatches === 4 && completedActivities === 3) {
+                    completedActivities = 4;
+                    updateProgress();
+                    document.getElementById('feedback4').className = 'feedback success';
+                    document.getElementById('feedback4').textContent = '🏆 Fantastico! Hai abbinato tutto correttamente!';
+                }
+            }
+        }
+
+        function updateProgress() {
+            const percentage = (completedActivities / 4) * 100;
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = Math.round(percentage) + '%';
+        }
+    </script>
 </body>
 </html>
