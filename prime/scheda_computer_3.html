@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheda 3 - I Componenti del Computer</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            line-height: 1.8;
+            max-width: 21cm;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        h1 {
+            color: #9C27B0;
+            text-align: center;
+            font-size: 28px;
+            border-bottom: 4px solid #9C27B0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .numero-scheda {
+            background: #9C27B0;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .sezione {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+        }
+        .componente-box {
+            background: white;
+            border: 3px solid #9C27B0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .componente-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .icona-componente {
+            font-size: 40px;
+            margin-right: 15px;
+        }
+        .nome-componente {
+            font-size: 24px;
+            font-weight: bold;
+            color: #9C27B0;
+        }
+        .descrizione-componente {
+            font-size: 18px;
+            margin-top: 10px;
+            padding-left: 55px;
+        }
+        .attivita {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border: 3px dashed #FF9800;
+            border-radius: 10px;
+        }
+        .attivita h3 {
+            color: #FF9800;
+            margin-top: 0;
+            font-size: 22px;
+        }
+        .griglia-componenti {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .componente-da-colorare {
+            border: 3px solid black;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="numero-scheda">📋 Scheda 3</div>
+    <h1>🧩 I COMPONENTI DEL COMPUTER</h1>
+    
+    <div class="sezione">
+        <h2 style="color: #9C27B0;">Le parti del computer</h2>
+        <p style="font-size: 20px; text-align: center; font-weight: bold;">
+            Il computer è fatto di TANTE PARTI!<br>
+            Ogni parte ha un nome e serve a qualcosa.
+        </p>
+    </div>
+
+    <div class="componente-box">
+        <div class="componente-header">
+            <div class="icona-componente">🖥️</div>
+            <div class="nome-componente">MONITOR (o SCHERMO)</div>
+        </div>
+        <div class="descrizione-componente">
+            È lo schermo dove vediamo le immagini, i video e tutto quello che facciamo.
+        </div>
+    </div>
+
+    <div class="componente-box">
+        <div class="componente-header">
+            <div class="icona-componente">⌨️</div>
+            <div class="nome-componente">TASTIERA</div>
+        </div>
+        <div class="descrizione-componente">
+            Ha tanti tasti con lettere e numeri. Serve per scrivere.
+        </div>
+    </div>
+
+    <div class="componente-box">
+        <div class="componente-header">
+            <div class="icona-componente">🖱️</div>
+            <div class="nome-componente">MOUSE</div>
+        </div>
+        <div class="descrizione-componente">
+            Lo muoviamo con la mano per cliccare e scegliere le cose sullo schermo.
+        </div>
+    </div>
+
+    <div class="componente-box">
+        <div class="componente-header">
+            <div class="icona-componente">💾</div>
+            <div class="nome-componente">CASE (o UNITÀ CENTRALE)</div>
+        </div>
+        <div class="descrizione-componente">
+            È la "scatola" del computer, dove c'è il cervello che fa funzionare tutto.
+        </div>
+    </div>
+
+    <div class="attivita">
+        <h3>🎨 ATTIVITÀ 1: Colora i componenti</h3>
+        <div class="griglia-componenti">
+            <div class="componente-da-colorare">
+                <div style="font-weight: bold; margin-bottom: 10px;">MONITOR</div>
+                <svg width="120" height="100" viewBox="0 0 120 100">
+                    <rect x="10" y="10" width="100" height="65" fill="white" stroke="black" stroke-width="3"/>
+                    <rect x="18" y="18" width="84" height="50" fill="white" stroke="black" stroke-width="2"/>
+                    <rect x="45" y="75" width="30" height="10" fill="white" stroke="black" stroke-width="2"/>
+                    <rect x="35" y="85" width="50" height="5" fill="white" stroke="black" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="componente-da-colorare">
+                <div style="font-weight: bold; margin-bottom: 10px;">TASTIERA</div>
+                <svg width="120" height="100" viewBox="0 0 140 60">
+                    <rect x="10" y="10" width="120" height="40" fill="white" stroke="black" stroke-width="3" rx="3"/>
+                    <rect x="15" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="28" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="41" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="54" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="67" y="15" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="15" y="27" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="28" y="27" width="50" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                    <rect x="81" y="27" width="10" height="8" fill="white" stroke="black" stroke-width="1.5"/>
+                </svg>
+            </div>
+            <div class="componente-da-colorare">
+                <div style="font-weight: bold; margin-bottom: 10px;">MOUSE</div>
+                <svg width="120" height="100" viewBox="0 0 80 100">
+                    <ellipse cx="40" cy="50" rx="25" ry="35" fill="white" stroke="black" stroke-width="3"/>
+                    <line x1="40" y1="20" x2="40" y2="55" stroke="black" stroke-width="2"/>
+                    <circle cx="40" cy="30" r="5" fill="white" stroke="black" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="componente-da-colorare">
+                <div style="font-weight: bold; margin-bottom: 10px;">CASE</div>
+                <svg width="120" height="100" viewBox="0 0 80 120">
+                    <rect x="15" y="10" width="50" height="80" fill="white" stroke="black" stroke-width="3"/>
+                    <circle cx="40" cy="30" r="8" fill="white" stroke="black" stroke-width="2"/>
+                    <rect x="25" y="50" width="30" height="4" fill="white" stroke="black" stroke-width="2"/>
+                    <rect x="25" y="60" width="30" height="15" fill="white" stroke="black" stroke-width="2"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="attivita">
+        <h3>✏️ ATTIVITÀ 2: Completa i nomi</h3>
+        <div style="font-size: 20px; line-height: 3;">
+            <p>🖥️ M __ __ I T __ __</p>
+            <p>⌨️ T __ S T __ __ R __</p>
+            <p>🖱️ M __ __ S E</p>
+            <p>💾 C __ S E</p>
+        </div>
+    </div>
+
+    <div class="attivita">
+        <h3>🔗 ATTIVITÀ 3: Abbina la descrizione</h3>
+        <p style="font-size: 18px;">Collega ogni componente con la sua funzione:</p>
+        <div style="margin: 20px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                <span style="font-size: 20px; font-weight: bold;">MONITOR</span>
+                <span style="font-size: 18px;">• Serve per scrivere</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                <span style="font-size: 20px; font-weight: bold;">TASTIERA</span>
+                <span style="font-size: 18px;">• Serve per vedere</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                <span style="font-size: 20px; font-weight: bold;">MOUSE</span>
+                <span style="font-size: 18px;">• È il cervello del computer</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 8px;">
+                <span style="font-size: 20px; font-weight: bold;">CASE</span>
+                <span style="font-size: 18px;">• Serve per cliccare</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sezione" style="background: #E1BEE7; border-left-color: #9C27B0;">
+        <h3 style="color: #6A1B9A;">💡 Ricorda!</h3>
+        <p style="font-size: 18px; font-weight: bold; text-align: center;">
+            🖥️ MONITOR = vedo<br>
+            ⌨️ TASTIERA = scrivo<br>
+            🖱️ MOUSE = clicco<br>
+            💾 CASE = cervello
+        </p>
+    </div>
+
+</body>
+</html>
