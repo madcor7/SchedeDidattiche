@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scheda 6 - Scrivere con il Computer</title>
+    <title>Scheda 6 - Scrivere con il Computer (Interattiva)</title>
     <style>
-        @page {
-            size: A4;
-            margin: 1.5cm;
-        }
         body {
             font-family: 'Comic Sans MS', 'Arial', sans-serif;
-            line-height: 1.8;
-            max-width: 21cm;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
             background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         h1 {
             color: #673AB7;
             text-align: center;
-            font-size: 28px;
-            border-bottom: 4px solid #673AB7;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            font-size: 32px;
         }
         .numero-scheda {
             background: #673AB7;
@@ -32,7 +30,6 @@
             border-radius: 20px;
             display: inline-block;
             font-size: 18px;
-            margin-bottom: 15px;
         }
         .sezione {
             margin: 25px 0;
@@ -45,20 +42,41 @@
             background: white;
             padding: 20px;
             margin: 20px 0;
-            border: 3px dashed #FF9800;
+            border: 3px solid #FF9800;
             border-radius: 10px;
         }
         .attivita h3 {
             color: #FF9800;
-            margin-top: 0;
             font-size: 22px;
         }
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .facile { background: #C8E6C9; color: #2E7D32; }
+        .medio { background: #FFF9C4; color: #F57F17; }
+        .difficile { background: #FFCDD2; color: #C62828; }
+        
         .passo {
             background: #E1BEE7;
             border: 3px solid #673AB7;
             border-radius: 10px;
             padding: 20px;
             margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .passo:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(103, 58, 183, 0.3);
+        }
+        .passo.clicked {
+            background: #C8E6C9;
+            border-color: #4CAF50;
         }
         .numero-passo {
             background: #673AB7;
@@ -78,167 +96,656 @@
             font-size: 18px;
             padding-left: 60px;
         }
-        .tastiera-visual {
-            background: white;
-            border: 3px solid black;
-            border-radius: 10px;
+        
+        .keyboard-simulator {
+            background: #f5f5f5;
+            border: 3px solid #673AB7;
+            border-radius: 15px;
             padding: 20px;
-            text-align: center;
+            margin: 20px 0;
         }
-        .riga-tasti {
+        .key-row {
             display: flex;
             justify-content: center;
             gap: 5px;
             margin: 5px 0;
         }
-        .tasto {
-            width: 40px;
-            height: 40px;
-            border: 2px solid black;
+        .key {
+            background: white;
+            border: 2px solid #673AB7;
             border-radius: 5px;
+            padding: 10px 15px;
+            min-width: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+        .key:hover {
+            background: #E1BEE7;
+            transform: translateY(-2px);
+        }
+        .key:active {
+            background: #673AB7;
+            color: white;
+        }
+        .key.space {
+            min-width: 200px;
+        }
+        .text-display {
+            background: white;
+            border: 3px solid #673AB7;
+            min-height: 80px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 20px;
+            margin: 15px 0;
+            word-wrap: break-word;
+        }
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 20px;
+            background: #673AB7;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .draggable-step {
+            background: #E1BEE7;
+            border: 3px solid #673AB7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            cursor: move;
+            display: inline-block;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .draggable-step:hover {
+            background: #D1C4E9;
+            transform: scale(1.05);
+        }
+        .draggable-step.placed {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .drop-slot {
+            border: 3px dashed #673AB7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 60px;
+            text-align: center;
+            background: #f9f9f9;
+            transition: all 0.3s;
+        }
+        .drop-slot.filled {
+            background: #C8E6C9;
+            border-style: solid;
+            border-color: #4CAF50;
+        }
+        .drop-slot:hover {
+            background: #E3F2FD;
+        }
+        
+        .word-target {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            border: 3px solid #673AB7;
+            border-radius: 20px;
+            background: #FFF9C4;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .word-target:hover {
+            background: #FFE082;
+            transform: scale(1.05);
+        }
+        .word-target.hit {
+            background: #C8E6C9;
+            border-color: #4CAF50;
+            animation: pop 0.3s;
+        }
+        @keyframes pop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .typing-challenge {
+            background: #E8F5E9;
+            border: 3px solid #4CAF50;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .target-word {
+            font-size: 36px;
+            font-weight: bold;
+            color: #673AB7;
+            margin: 20px 0;
+        }
+        .typing-input {
+            width: 80%;
+            padding: 15px;
+            font-size: 24px;
+            border: 3px solid #673AB7;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+        }
+        .typing-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        .feedback {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            display: none;
+        }
+        .feedback.success {
+            background: #C8E6C9;
+            color: #2E7D32;
+            display: block;
+        }
+        .feedback.error {
+            background: #FFCDD2;
+            color: #C62828;
+            display: block;
+        }
+        
+        .btn-check {
+            background: #673AB7;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        .btn-check:hover {
+            background: #5E35B1;
+            transform: scale(1.05);
+        }
+        .btn-reset {
+            background: #FF9800;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #673AB7, #9575CD);
+            width: 0%;
+            transition: width 0.5s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
             font-weight: bold;
-            background: white;
         }
-        .tasto-spazio {
-            width: 200px;
-        }
-        .area-scrittura {
-            background: white;
-            border: 3px solid #673AB7;
-            min-height: 120px;
-            padding: 20px;
-            border-radius: 10px;
+        .score {
+            text-align: center;
             font-size: 20px;
-            line-height: 2.5;
+            font-weight: bold;
+            color: #673AB7;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <div class="numero-scheda">📋 Scheda 6</div>
-    <h1>⌨️ SCRIVERE CON IL COMPUTER</h1>
-    
-    <div class="sezione">
-        <h2 style="color: #673AB7;">Come si scrive al computer?</h2>
-        <p style="font-size: 20px; font-weight: bold; text-align: center;">
-            Per scrivere al computer uso la TASTIERA!<br>
-            Ogni tasto ha una lettera o un numero.
-        </p>
-    </div>
-
-    <div class="sezione">
-        <h3 style="color: #673AB7;">I passi per scrivere:</h3>
+    <div class="container">
+        <div class="numero-scheda">📋 Scheda 6</div>
+        <h1>⌨️ SCRIVERE CON IL COMPUTER</h1>
         
-        <div class="passo">
-            <div class="numero-passo">1</div>
-            <div class="testo-passo">
-                <strong>Apro il programma di scrittura</strong><br>
-                (come Word o Google Docs)
-            </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress">0%</div>
+        </div>
+        <div class="score" id="score">Punteggio: 0 / 5</div>
+        
+        <div class="sezione">
+            <h2 style="color: #673AB7;">Come si scrive al computer?</h2>
+            <p style="font-size: 20px; font-weight: bold; text-align: center;">
+                Per scrivere al computer uso la TASTIERA!<br>
+                Ogni tasto ha una lettera o un numero. ⌨️
+            </p>
         </div>
 
-        <div class="passo">
-            <div class="numero-passo">2</div>
-            <div class="testo-passo">
-                <strong>Guardo lo schermo</strong><br>
-                Vedo una linea che lampeggia: | <br>
-                Questa linea si chiama CURSORE
+        <div class="sezione">
+            <h3 style="color: #673AB7;">I passi per scrivere:</h3>
+            <p style="font-size: 18px; text-align: center;">Clicca su ogni passo per scoprirlo!</p>
+            
+            <div class="passo" onclick="clickStep(this, 1)">
+                <div class="numero-passo">1</div>
+                <div class="testo-passo">
+                    <strong>Apro il programma di scrittura</strong><br>
+                    (come Word o Google Docs)
+                </div>
             </div>
+
+            <div class="passo" onclick="clickStep(this, 2)">
+                <div class="numero-passo">2</div>
+                <div class="testo-passo">
+                    <strong>Guardo lo schermo</strong><br>
+                    Vedo una linea che lampeggia: | <br>
+                    Questa linea si chiama CURSORE
+                </div>
+            </div>
+
+            <div class="passo" onclick="clickStep(this, 3)">
+                <div class="numero-passo">3</div>
+                <div class="testo-passo">
+                    <strong>Premo i tasti della tastiera</strong><br>
+                    Ogni tasto che premo appare sullo schermo!
+                </div>
+            </div>
+
+            <div class="passo" onclick="clickStep(this, 4)">
+                <div class="numero-passo">4</div>
+                <div class="testo-passo">
+                    <strong>Salvo il mio lavoro</strong><br>
+                    Clicco su "Salva" per non perdere quello che ho scritto
+                </div>
+            </div>
+            <div class="feedback" id="feedback1"></div>
         </div>
 
-        <div class="passo">
-            <div class="numero-passo">3</div>
-            <div class="testo-passo">
-                <strong>Premo i tasti della tastiera</strong><br>
-                Ogni tasto che premo appare sullo schermo!
+        <div class="attivita">
+            <h3>⌨️ GIOCO 1: Simulatore di tastiera <span class="difficulty-badge facile">FACILE</span></h3>
+            <p style="font-size: 18px;">Clicca sui tasti per scrivere! Scrivi il tuo nome:</p>
+            <div class="text-display" id="textDisplay"><span class="cursor-blink"></span></div>
+            <div class="keyboard-simulator">
+                <div class="key-row">
+                    <div class="key" onclick="typeKey('Q')">Q</div>
+                    <div class="key" onclick="typeKey('W')">W</div>
+                    <div class="key" onclick="typeKey('E')">E</div>
+                    <div class="key" onclick="typeKey('R')">R</div>
+                    <div class="key" onclick="typeKey('T')">T</div>
+                    <div class="key" onclick="typeKey('Y')">Y</div>
+                    <div class="key" onclick="typeKey('U')">U</div>
+                    <div class="key" onclick="typeKey('I')">I</div>
+                    <div class="key" onclick="typeKey('O')">O</div>
+                    <div class="key" onclick="typeKey('P')">P</div>
+                </div>
+                <div class="key-row">
+                    <div class="key" onclick="typeKey('A')">A</div>
+                    <div class="key" onclick="typeKey('S')">S</div>
+                    <div class="key" onclick="typeKey('D')">D</div>
+                    <div class="key" onclick="typeKey('F')">F</div>
+                    <div class="key" onclick="typeKey('G')">G</div>
+                    <div class="key" onclick="typeKey('H')">H</div>
+                    <div class="key" onclick="typeKey('J')">J</div>
+                    <div class="key" onclick="typeKey('K')">K</div>
+                    <div class="key" onclick="typeKey('L')">L</div>
+                </div>
+                <div class="key-row">
+                    <div class="key" onclick="typeKey('Z')">Z</div>
+                    <div class="key" onclick="typeKey('X')">X</div>
+                    <div class="key" onclick="typeKey('C')">C</div>
+                    <div class="key" onclick="typeKey('V')">V</div>
+                    <div class="key" onclick="typeKey('B')">B</div>
+                    <div class="key" onclick="typeKey('N')">N</div>
+                    <div class="key" onclick="typeKey('M')">M</div>
+                </div>
+                <div class="key-row">
+                    <div class="key space" onclick="typeKey(' ')">SPAZIO</div>
+                    <div class="key" onclick="deleteKey()">⌫ CANC</div>
+                </div>
             </div>
+            <button class="btn-check" onclick="checkTyping()">Verifica ✓</button>
+            <div class="feedback" id="feedback2"></div>
         </div>
 
-        <div class="passo">
-            <div class="numero-passo">4</div>
-            <div class="testo-passo">
-                <strong>Salvo il mio lavoro</strong><br>
-                Clicco su "Salva" per non perdere quello che ho scritto
+        <div class="attivita">
+            <h3>🔢 GIOCO 2: Metti in ordine <span class="difficulty-badge medio">MEDIO</span></h3>
+            <p style="font-size: 18px;">Trascina i passi negli slot nell'ordine corretto (1→4):</p>
+            <div style="text-align: center; margin: 20px 0;">
+                <div class="draggable-step" draggable="true" data-order="4">Salvo il mio lavoro</div>
+                <div class="draggable-step" draggable="true" data-order="2">Guardo il cursore</div>
+                <div class="draggable-step" draggable="true" data-order="3">Premo i tasti</div>
+                <div class="draggable-step" draggable="true" data-order="1">Apro il programma</div>
             </div>
+            <div class="drop-slot" data-position="1">1° Passo</div>
+            <div class="drop-slot" data-position="2">2° Passo</div>
+            <div class="drop-slot" data-position="3">3° Passo</div>
+            <div class="drop-slot" data-position="4">4° Passo</div>
+            <button class="btn-check" onclick="checkOrder()">Verifica ✓</button>
+            <button class="btn-reset" onclick="resetOrder()">🔄 Ricomincia</button>
+            <div class="feedback" id="feedback3"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>🎯 GIOCO 3: Caccia alle parole <span class="difficulty-badge medio">MEDIO</span></h3>
+            <p style="font-size: 18px;">Clicca sulle parole che hanno a che fare con la SCRITTURA:</p>
+            <div style="text-align: center; margin: 20px 0;">
+                <div class="word-target" onclick="hitWord(this, true)">TASTIERA</div>
+                <div class="word-target" onclick="hitWord(this, false)">BICICLETTA</div>
+                <div class="word-target" onclick="hitWord(this, true)">SCRIVERE</div>
+                <div class="word-target" onclick="hitWord(this, false)">CUCINARE</div>
+                <div class="word-target" onclick="hitWord(this, true)">TESTO</div>
+                <div class="word-target" onclick="hitWord(this, false)">GIOCARE</div>
+                <div class="word-target" onclick="hitWord(this, true)">LETTERE</div>
+                <div class="word-target" onclick="hitWord(this, false)">CORRERE</div>
+            </div>
+            <div class="feedback" id="feedback4"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>⚡ GIOCO 4: Sfida di digitazione <span class="difficulty-badge difficile">DIFFICILE</span></h3>
+            <p style="font-size: 18px;">Scrivi la parola che vedi usando la tastiera vera del computer!</p>
+            <div class="typing-challenge">
+                <p style="font-size: 20px; color: #666;">Scrivi questa parola:</p>
+                <div class="target-word" id="targetWord">COMPUTER</div>
+                <input type="text" class="typing-input" id="typingInput" placeholder="Scrivi qui..." autocomplete="off">
+                <p style="font-size: 16px; color: #999; margin-top: 15px;">
+                    Tempo: <span id="typingTime" style="color: #673AB7; font-weight: bold;">0</span> secondi
+                </p>
+            </div>
+            <button class="btn-check" onclick="checkTypingChallenge()">Verifica ✓</button>
+            <button class="btn-reset" onclick="nextWord()">📝 Prossima parola</button>
+            <div class="feedback" id="feedback5"></div>
+        </div>
+
+        <div class="attivita">
+            <h3>✍️ GIOCO 5: Scrivi una frase completa <span class="difficulty-badge difficile">DIFFICILE</span></h3>
+            <p style="font-size: 18px;">Usa la tastiera per scrivere una frase su di te (minimo 5 parole):</p>
+            <textarea style="width: 100%; min-height: 100px; padding: 15px; font-size: 18px; border: 3px solid #673AB7; border-radius: 10px; font-family: 'Comic Sans MS', Arial;" id="sentenceInput" placeholder="Esempio: Mi chiamo Mario e mi piace giocare..."></textarea>
+            <button class="btn-check" onclick="checkSentence()">Verifica ✓</button>
+            <div class="feedback" id="feedback6"></div>
+        </div>
+
+        <div class="sezione" style="background: #E1BEE7; border-left-color: #673AB7;">
+            <h3 style="color: #4A148C;">💡 Ricorda!</h3>
+            <p style="font-size: 20px; font-weight: bold; text-align: center;">
+                Per scrivere al computer:<br>
+                1️⃣ Apro il programma<br>
+                2️⃣ Uso la TASTIERA<br>
+                3️⃣ Vedo le lettere sullo SCHERMO<br>
+                4️⃣ SALVO il mio lavoro
+            </p>
         </div>
     </div>
 
-    <div class="attivita">
-        <h3>🎨 ATTIVITÀ 1: Colora la tastiera</h3>
-        <p style="font-size: 18px;">Colora i tasti della tastiera con colori diversi</p>
-        <div class="tastiera-visual">
-            <div class="riga-tasti">
-                <div class="tasto">Q</div>
-                <div class="tasto">W</div>
-                <div class="tasto">E</div>
-                <div class="tasto">R</div>
-                <div class="tasto">T</div>
-                <div class="tasto">Y</div>
-            </div>
-            <div class="riga-tasti">
-                <div class="tasto">A</div>
-                <div class="tasto">S</div>
-                <div class="tasto">D</div>
-                <div class="tasto">F</div>
-                <div class="tasto">G</div>
-                <div class="tasto">H</div>
-            </div>
-            <div class="riga-tasti">
-                <div class="tasto">Z</div>
-                <div class="tasto">X</div>
-                <div class="tasto">C</div>
-                <div class="tasto">V</div>
-                <div class="tasto">B</div>
-            </div>
-            <div class="riga-tasti">
-                <div class="tasto tasto-spazio">SPAZIO</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="attivita">
-        <h3>✏️ ATTIVITÀ 2: Collega i passi nell'ordine giusto</h3>
-        <p style="font-size: 18px;">Numera i passi da 1 a 4 nell'ordine corretto:</p>
-        <div style="font-size: 20px; line-height: 3;">
-            <p><span style="width: 40px; height: 40px; border: 3px solid black; display: inline-block; text-align: center; line-height: 34px; border-radius: 50%; margin-right: 15px;"></span> Salvo il mio lavoro</p>
-            <p><span style="width: 40px; height: 40px; border: 3px solid black; display: inline-block; text-align: center; line-height: 34px; border-radius: 50%; margin-right: 15px;"></span> Premo i tasti</p>
-            <p><span style="width: 40px; height: 40px; border: 3px solid black; display: inline-block; text-align: center; line-height: 34px; border-radius: 50%; margin-right: 15px;"></span> Apro il programma</p>
-            <p><span style="width: 40px; height: 40px; border: 3px solid black; display: inline-block; text-align: center; line-height: 34px; border-radius: 50%; margin-right: 15px;"></span> Guardo il cursore</p>
-        </div>
-    </div>
-
-    <div class="attivita">
-        <h3>📝 ATTIVITÀ 3: Esercizio di scrittura</h3>
-        <p style="font-size: 18px;">Immagina di scrivere al computer. Scrivi qui una frase semplice:</p>
-        <div class="area-scrittura">
-            <p style="color: #999; font-style: italic;">Esempio: "Mi chiamo Paolo e ho 10 anni"</p>
-            <div style="border-bottom: 2px solid #ccc; margin: 15px 0; padding-top: 30px;"></div>
-            <div style="border-bottom: 2px solid #ccc; margin: 15px 0; padding-top: 30px;"></div>
-        </div>
-    </div>
-
-    <div class="attivita">
-        <h3>✅ ATTIVITÀ 4: Vero o Falso?</h3>
-        <div style="font-size: 20px; line-height: 2.5;">
-            <p>□ VERO  □ FALSO  - Per scrivere uso la tastiera</p>
-            <p>□ VERO  □ FALSO  - Il cursore è una linea che lampeggia</p>
-            <p>□ VERO  □ FALSO  - Non devo salvare il mio lavoro</p>
-            <p>□ VERO  □ FALSO  - Ogni tasto ha una lettera</p>
-        </div>
-    </div>
-
-    <div class="sezione" style="background: #E1BEE7; border-left-color: #673AB7;">
-        <h3 style="color: #4A148C;">💡 Ricorda!</h3>
-        <p style="font-size: 20px; font-weight: bold; text-align: center;">
-            Per scrivere al computer:<br>
-            1️⃣ Apro il programma<br>
-            2️⃣ Uso la TASTIERA<br>
-            3️⃣ Vedo le lettere sullo SCHERMO<br>
-            4️⃣ SALVO il mio lavoro
-        </p>
-    </div>
-
+    <script>
+        let completedActivities = 0;
+        let score = 0;
+        let clickedSteps = new Set();
+        let typedText = '';
+        let correctHits = 0;
+        let typingStartTime = 0;
+        let typingInterval;
+        
+        const challengeWords = ['COMPUTER', 'TASTIERA', 'MOUSE', 'SCRIVERE', 'TESTO'];
+        let currentWordIndex = 0;
+        
+        function updateScore() {
+            document.getElementById('score').textContent = `Punteggio: ${score} / 5`;
+        }
+        
+        function updateProgress() {
+            const percentage = (completedActivities / 5) * 100;
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = Math.round(percentage) + '%';
+        }
+        
+        // Gioco 1: Scopri i passi
+        function clickStep(element, stepNum) {
+            if (!element.classList.contains('clicked')) {
+                element.classList.add('clicked');
+                clickedSteps.add(stepNum);
+                
+                if (clickedSteps.size === 4 && completedActivities === 0) {
+                    completedActivities = 1;
+                    score++;
+                    updateScore();
+                    updateProgress();
+                    document.getElementById('feedback1').className = 'feedback success';
+                    document.getElementById('feedback1').textContent = '🎉 Ottimo! Hai scoperto tutti i passi! +1 punto';
+                }
+            }
+        }
+        
+        // Gioco 2: Tastiera simulata
+        function typeKey(key) {
+            typedText += key;
+            updateDisplay();
+        }
+        
+        function deleteKey() {
+            typedText = typedText.slice(0, -1);
+            updateDisplay();
+        }
+        
+        function updateDisplay() {
+            document.getElementById('textDisplay').innerHTML = typedText + '<span class="cursor-blink"></span>';
+        }
+        
+        function checkTyping() {
+            if (typedText.trim().length >= 2) {
+                const feedback = document.getElementById('feedback2');
+                feedback.className = 'feedback success';
+                feedback.textContent = `✨ Bravissimo! Hai scritto: "${typedText}"! +1 punto`;
+                if (completedActivities === 1) {
+                    completedActivities = 2;
+                    score++;
+                    updateScore();
+                    updateProgress();
+                }
+            } else {
+                document.getElementById('feedback2').className = 'feedback error';
+                document.getElementById('feedback2').textContent = '❌ Scrivi almeno 2 lettere!';
+            }
+        }
+        
+        // Gioco 3: Drag and drop ordine
+        let draggedStep = null;
+        document.querySelectorAll('.draggable-step').forEach(step => {
+            step.addEventListener('dragstart', function() {
+                if (!this.classList.contains('placed')) {
+                    draggedStep = this;
+                    this.style.opacity = '0.5';
+                }
+            });
+            step.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+            });
+            step.addEventListener('click', function() {
+                if (!this.classList.contains('placed')) {
+                    draggedStep = this;
+                    this.style.background = '#D1C4E9';
+                }
+            });
+        });
+        
+        document.querySelectorAll('.drop-slot').forEach(slot => {
+            slot.addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+            slot.addEventListener('drop', function(e) {
+                e.preventDefault();
+                if (draggedStep && !this.classList.contains('filled')) {
+                    this.textContent = draggedStep.textContent;
+                    this.dataset.order = draggedStep.dataset.order;
+                    this.classList.add('filled');
+                    draggedStep.classList.add('placed');
+                    draggedStep = null;
+                }
+            });
+            slot.addEventListener('click', function() {
+                if (draggedStep && !this.classList.contains('filled')) {
+                    this.textContent = draggedStep.textContent;
+                    this.dataset.order = draggedStep.dataset.order;
+                    this.classList.add('filled');
+                    draggedStep.classList.add('placed');
+                    draggedStep = null;
+                }
+            });
+        });
+        
+        function checkOrder() {
+            let allCorrect = true;
+            document.querySelectorAll('.drop-slot').forEach(slot => {
+                if (slot.dataset.position !== slot.dataset.order) {
+                    allCorrect = false;
+                }
+            });
+            
+            const feedback = document.getElementById('feedback3');
+            if (allCorrect) {
+                feedback.className = 'feedback success';
+                feedback.textContent = '🎯 Perfetto! L\'ordine è corretto! +1 punto';
+                if (completedActivities === 2) {
+                    completedActivities = 3;
+                    score++;
+                    updateScore();
+                    updateProgress();
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ L\'ordine non è corretto. Riprova!';
+            }
+        }
+        
+        function resetOrder() {
+            document.querySelectorAll('.drop-slot').forEach(slot => {
+                const pos = slot.dataset.position;
+                slot.textContent = pos + '° Passo';
+                slot.classList.remove('filled');
+                delete slot.dataset.order;
+            });
+            document.querySelectorAll('.draggable-step').forEach(step => {
+                step.classList.remove('placed');
+                step.style.background = '#E1BEE7';
+            });
+            document.getElementById('feedback3').style.display = 'none';
+        }
+        
+        // Gioco 4: Caccia alle parole
+        let totalWords = 8;
+        let clickedWords = 0;
+        function hitWord(element, isCorrect) {
+            if (element.classList.contains('hit')) return;
+            
+            element.classList.add('hit');
+            clickedWords++;
+            
+            if (isCorrect) {
+                correctHits++;
+            }
+            
+            if (clickedWords === totalWords) {
+                const feedback = document.getElementById('feedback4');
+                if (correctHits === 4) {
+                    feedback.className = 'feedback success';
+                    feedback.textContent = '🌟 Perfetto! Hai trovato tutte le parole corrette! +1 punto';
+                    if (completedActivities === 3) {
+                        completedActivities = 4;
+                        score++;
+                        updateScore();
+                        updateProgress();
+                    }
+                } else {
+                    feedback.className = 'feedback error';
+                    feedback.textContent = `❌ Hai trovato ${correctHits}/4 parole corrette. Le parole giuste erano: TASTIERA, SCRIVERE, TESTO, LETTERE`;
+                }
+            }
+        }
+        
+        // Gioco 5: Sfida di digitazione
+        function startTypingTimer() {
+            if (!typingInterval) {
+                typingStartTime = Date.now();
+                typingInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - typingStartTime) / 1000);
+                    document.getElementById('typingTime').textContent = elapsed;
+                }, 1000);
+            }
+        }
+        
+        document.getElementById('typingInput').addEventListener('input', startTypingTimer);
+        
+        function checkTypingChallenge() {
+            const input = document.getElementById('typingInput').value.toUpperCase().trim();
+            const target = document.getElementById('targetWord').textContent;
+            const feedback = document.getElementById('feedback5');
+            
+            if (input === target) {
+                clearInterval(typingInterval);
+                const time = Math.floor((Date.now() - typingStartTime) / 1000);
+                feedback.className = 'feedback success';
+                feedback.textContent = `🏆 Esatto! Hai scritto correttamente in ${time} secondi! +1 punto`;
+                if (completedActivities === 4) {
+                    completedActivities = 5;
+                    score++;
+                    updateScore();
+                    updateProgress();
+                    
+                    setTimeout(() => {
+                        alert('🎉 COMPLIMENTI! Hai completato TUTTA la scheda 6! Punteggio: ' + score + '/5! 🌟');
+                    }, 1000);
+                }
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = '❌ Non è corretto. Riprova!';
+            }
+        }
+        
+        function nextWord() {
+            currentWordIndex = (currentWordIndex + 1) % challengeWords.length;
+            document.getElementById('targetWord').textContent = challengeWords[currentWordIndex];
+            document.getElementById('typingInput').value = '';
+            document.getElementById('typingTime').textContent = '0';
+            clearInterval(typingInterval);
+            typingInterval = null;
+            document.getElementById('feedback5').style.display = 'none';
+        }
+        
+        // Gioco 6: Frase completa
+        function checkSentence() {
+            const sentence = document.getElementById('sentenceInput').value.trim();
+            const words = sentence.split(/\s+/).filter(w => w.length > 0);
+            const feedback = document.getElementById('feedback6');
+            
+            if (words.length >= 5) {
+                feedback.className = 'feedback success';
+                feedback.textContent = `✨ Fantastico! Hai scritto una bella frase con ${words.length} parole!`;
+            } else {
+                feedback.className = 'feedback error';
+                feedback.textContent = `❌ La tua frase ha solo ${words.length} parole. Scrivi almeno 5 parole!`;
+            }
+        }
+    </script>
 </body>
 </html>
